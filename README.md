@@ -1,2 +1,3 @@
-# go-remote-controller
-Control a Windows OS from the same network with through a web server
+# Go remote controller (for Windows)
+
+Control a Windows OS from the same network through a web server
