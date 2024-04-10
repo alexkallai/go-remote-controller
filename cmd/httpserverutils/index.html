@@ -1,0 +1,617 @@
+<html>
+
+<head>
+    <!--PAGE TITLE-->
+    <title>Remote control page</title>
+    <!--Custom animation CSS from https://animate.style/-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!--trick to disable zooming on phone-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <!--Style-->
+    <style>
+
+        /*Full body style*/
+        body,
+        html {
+            overscroll-behavior: contain;
+            background: #5f5f5f;
+            /*With this option there are no scrolling on grid pages*/
+            position: sticky;
+            /* Set height of body and the document to 100% */
+            height: 100%;
+            margin: 0;
+            /*background: linear-gradient(0deg, rgba(233, 184, 129, 0.662) 0%, rgba(255,255,255,0.5662640056022409) 100%, rgba(255,61,61,0) 100%);*/
+        }
+
+        /*disable double tap zoom?*/
+        .disable-dbl-tap-zoom {
+            touch-action: manipulation;
+        }
+
+        /*Container that contains everything*/
+        .container {
+            /*Disable selecting on the page*/
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Old versions of Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+
+            /*The full page layout details:*/
+            width: 100%;
+            height: 100%;
+
+            display: grid;
+
+            grid-template-columns: 1fr;
+            grid-template-rows: 50px 1fr;
+        }
+
+        /*TAB buttons*/
+        .tablink {
+            background-color: #4a545f;
+            color: white;
+            border: none;
+            border-top: solid rgb(255, 255, 255);
+            margin-right: -4;
+            /*negative value because inline-block has spaces between buttons -.-'*/
+            outline: none;
+            font-size: 80%;
+            font-weight: bold;
+            height: 80%;
+            width: 20%;
+            min-width: 30px;
+            max-width: 70px;
+            max-height: 70px;
+            display: inline-block;
+            top: 0;
+        }
+
+        /*exception from tablink*/
+        #aboutButton {
+            max-width: 50px;
+            margin-right: 0;
+            border: none;
+            border-bottom-left-radius: 10px;
+            border-bottom: solid #a0a0a0;
+            border-left: solid #858585;
+        }
+
+        /*trackPadGrid layout*/
+        .trackPadGrid {
+            width: 100%;
+            height: 100%;
+
+            display: grid;
+
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 80px;
+        }
+
+        /*TOUCH CANVAS LOCATION IN trackPadGrid*/
+        .CANVAS {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        /*TOUCH CANVAS SYTLE*/
+        canvas.CANVAS {
+            height: 95%;
+            width: 90%;
+            position: relative;
+            margin: auto;
+            background: rgba(126, 126, 126, 0.566);
+            border-radius: 10px;
+        }
+
+        /*MOUSE BUTTON LOCATION IN trackPadGrid*/
+        #mouseButtonGrid {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        /*mouseButtonGrid layout*/
+        #mouseButtonGrid {
+            width: 90%;
+            height: 95%;
+            column-gap: 10px;
+            row-gap: 15px;
+            margin-right: 5%;
+            margin-left: 5%;
+            display: grid;
+
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        /*mousebutton style*/
+        .mousebutton {
+            font-size: 15px;
+            font-family: Arial;
+            border-width: 1px;
+            color: #fff;
+            border-color: #566963;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: inset 0px 1px 3px 0px #91b8b3;
+            text-shadow: inset 0px -1px 0px #2b665e;
+            background: #45a29e;
+        }
+
+        /*BUTTON LOCATION IN mouseButtonGrid*/
+        #leftclick {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        /*BUTTON LOCATION IN mouseButtonGrid*/
+        #midclick {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        /*BUTTON LOCATION IN mouseButtonGrid*/
+        #rightclick {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        /*keyboardGrid layout*/
+        .keyboardGrid {
+            height: 80%;
+            width: 94%;
+            column-gap: 10px;
+            row-gap: 15px;
+            margin-right: 3%;
+            margin-left: 3%;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: repeat(6, 1fr);
+        }
+
+        /*keyboardbutton style*/
+        .keyboardbutton {
+            font-size: 15px;
+            font-family: Arial;
+            border-width: 1px;
+            color: #fff;
+            border-color: #566963;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: inset 0px 1px 3px 0px #91b8b3;
+            text-shadow: inset 0px -1px 0px #2b665e;
+            background: #45a29e;
+        }
+
+        /*mediaButtonGrid layout*/
+        .mediaButtonGrid {
+            height: 80%;
+            width: 94%;
+            column-gap: 10px;
+            row-gap: 15px;
+            margin-right: 3%;
+            margin-left: 3%;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: repeat(4, 1fr);
+        }
+
+        /*mediabutton style*/
+        .mediabutton {
+            font-size: 15px;
+            font-family: Arial;
+            border-width: 1px;
+            color: #fff;
+            border-color: #566963;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: inset 0px 1px 3px 0px #91b8b3;
+            text-shadow: inset 0px -1px 0px #2b665e;
+            background: #45a29e;
+        }
+
+        .aboutContainer {
+            width: 90%;
+            height: 90%;
+            column-gap: 10px;
+            row-gap: 15px;
+            margin-right: 5%;
+            margin-left: 5%;
+
+            display: grid;
+
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        /*---------------------TEXT STYLE--------------------------*/
+        h1 {
+            text-align: left;
+            margin-left: 10%;
+            margin-right: 10%;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            color: #66fcf1;
+            text-shadow: 0 0 15px #66fcf1
+        }
+
+        h2 {
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            left: 10%;
+            right: 10%;
+            font-weight: bold;
+            font-family: "Trebuchet MS", Tahoma, sans-serif;
+            color: rgb(255, 255, 255)
+        }
+
+        h3 {
+            text-align: left;
+            margin-left: 10%;
+            margin-right: 10%;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            color: #66fcf1;
+            text-shadow: 0 0 15px #66fcf1
+        }
+
+        h4 {
+            text-align: left;
+            margin-left: 10%;
+            margin-right: 10%;
+            font-weight: lighter;
+            font-family: 'Courier New', Courier, monospace;
+            color: #66fcf1;
+        }
+
+        a {
+            font-weight: bold;
+            text-align: left;
+            margin-left: 10%;
+            margin-right: 10%;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            color: #66fcf1;
+            text-shadow: 0 0 20px #66fcf1
+        }
+
+        /*-----------------------ANIMATIONS----------------------------*/
+        .keyboardbutton:active,
+        .mediabutton:active,
+        .mousebutton:active {
+            transform: translateY(3px);
+            box-shadow: 0 0 10px #66fcf1;
+        }
+
+        :root {
+            --animate-duration: 700ms;
+        }
+
+        /*
+    .keyboardbutton:after {
+    content: "";
+    display: block;
+    position: sticky;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 10px 40px white;
+    }
+
+    .keyboardbutton:active:after {
+    box-shadow: 0 0 0 0 white;
+    position: sticky;
+    left: 0;
+    top:0;
+    opacity: 1;
+    transition: 0s;
+    }
+*/
+    </style>
+
+
+</head>
+
+<body>
+    <!--HTML elements-->
+
+    <!--All elements are in this container div-->
+    <div class="container">
+        <!--Button row content-->
+        <div class="buttonRow">
+            <div id="tablinkDiv">
+                <button class="tablink" type="button" onclick="openPage('trackpad', this, '#45a29e')"
+                    id="defaultOpen">Trackpad</button>
+                <button class="tablink" type="button" onclick="openPage('keyboard', this, '#45a29e')">Keyboard</button>
+                <button class="tablink" type="button" onclick="openPage('media', this, '#45a29e')">Media</button>
+                <button class="tablink" type="button" onclick="openPage('information', this, '#45a29e')">Usage</button>
+                <button class="tablink" type="button" style="float: right" id="aboutButton"
+                    onclick="openPage('about', this, '#45a29e')">About</button>
+            </div>
+        </div>
+
+        <!--Page content-->
+        <div class="content">
+            <!--Trackpad page-->
+            <div id="trackpad" class="tabcontent">
+                <div class="animate__animated animate__fadeIn">
+                    <div class="trackPadGrid">
+                        <canvas class="CANVAS" id="touchCanvas" style="border:2px solid #000000;"></canvas>
+                        <div id="mouseButtonGrid">
+                            <button class="mousebutton" type="button" id="leftclick">Left click</button>
+                            <button class="mousebutton" type="button" id="midclick">Middle click</button>
+                            <button class="mousebutton" type="button" id="rightclick">Right click</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Keyboardbutton page-->
+            <div id="keyboard" class="tabcontent">
+                <div style="height: 5%"></div>
+                <div id="mediaButtonDiv" class="animate__animated animate__fadeIn">
+                    <div class="keyboardGrid">
+                        <button class="keyboardbutton" type="button" id="enter">Enter</button>
+                        <button class="keyboardbutton" type="button" id="backspace">Backspace</button>
+                        <button class="keyboardbutton" type="button" id="delete">Delete</button>
+                        <button class="keyboardbutton" type="button" id="home">Home</button>
+                        <button class="keyboardbutton" type="button" id="end">End</button>
+                        <button class="keyboardbutton" type="button" id="printscreen">Print Screen</button>
+                        <button class="keyboardbutton" type="button" id="pageup">Page Up</button>
+                        <button class="keyboardbutton" type="button" id="pagedown">Page Down</button>
+                        <button class="keyboardbutton" type="button" id="contextmenu">Context menu</button>
+                        <button class="keyboardbutton" type="button" id="copy">Copy (CTRL+C)</button>
+                        <button class="keyboardbutton" type="button" id="paste">Paste (CTRL+V)</button>
+                        <button class="keyboardbutton" type="button" id="desktop">Desktop (WIN+D)</button>
+                        <button class="keyboardbutton" type="button" id="undo">Undo (CTRL+Z)</button>
+                        <button class="keyboardbutton" type="button" id="uparrow">UP</button>
+                        <button class="keyboardbutton" type="button" id="selectall">Select all (CTRL+A)</button>
+                        <button class="keyboardbutton" type="button" id="leftarrow">LEFT</button>
+                        <button class="keyboardbutton" type="button" id="downarrow">DOWN</button>
+                        <button class="keyboardbutton" type="button" id="rightarrow">RIGHT</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Mediabutton page-->
+            <div id="media" class="tabcontent">
+                <div style="height: 5%"></div>
+                <div id="mediaButtonDiv" class="animate__animated animate__fadeIn">
+                    <div id="mediaButtonRowDiv">
+                        <div class="mediaButtonGrid">
+                            <button class="mediabutton" type="button" id="playpause">Play / Pause</button>
+                            <button class="mediabutton" type="button" id="previous">Previous</button>
+                            <button class="mediabutton" type="button" id="next">Next</button>
+                            <button class="mediabutton" type="button" id="fullscreen">Full screen (ALT+ENTER)</button>
+                            <button class="mediabutton" type="button" id="fullscreen_yt">Full screen Youtube
+                                (F)</button>
+                            <button class="mediabutton" type="button" id="escape">Escape</button>
+                            <button class="mediabutton" type="button" id="volumeup">Volume Up</button>
+                            <button class="mediabutton" type="button" id="mute">Mute</button>
+                            <button class="mediabutton" type="button" id="volumedown">Volume Down</button>
+                            <button class="mediabutton" type="button" id="open">Open (CTRL+O)</button>
+                            <button class="mediabutton" type="button" id="closeprogram">Exit (ALT+F4)</button>
+                            <button class="mediabutton" type="button" id="changefocus">Change focus ALT+TAB)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Usage page-->
+            <div id="information" class="tabcontent">
+                <div class="animate__animated animate__fadeIn">
+                    <h4>Control your PC without client app!</h4>
+                    <h3>Trackpad tab:</h3>
+                    <h4>Standard trackpad functionality, with dual touch scrolling. 2 finger double tap or press long
+                        without movement for a right click.</h4>
+                    <h3>Keyboard, media tab:</h3>
+                    <h4>The buttons are simulated as keypresses.</h4>
+                </div>
+            </div>
+
+            <!--About page-->
+            <div id="about" class="tabcontent">
+                <div class="animate__animated animate__jackInTheBox">
+                    <div class="aboutContainer">
+                        <div>
+                            <h1>Go remote controller</h1>
+                            <br>
+                            <h3>Author</h3>
+                            <h4>Alex Kallai</h4>
+                            <h3>Source</h3>
+                            <a href="https://github.com/alexkallai/go-remote-controller">https://github.com/alexkallai/go-remote-controller</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--SCRIPT-->
+    <script type="text/javascript">
+
+        //TAB SCRIPTS
+        // TODO why is color used here?
+        function openPage(page_name, element, color) {
+            var i, tabcontent, tablinks;
+            // Set all tabcontent element to invisible
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(page_name).style.display = "block";
+            element.style.backgroundColor = color;
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+
+
+        //Initializing the JS objects after the page is loaded
+        const postCanv = document.getElementById("touchCanvas");
+        const allKeyboardButtons = document.getElementsByClassName("keyboardbutton");
+        const allMediaButtons = document.getElementsByClassName("mediabutton");
+        const allMouseButtons = document.getElementsByClassName("mousebutton");
+
+        //POST and GET request sender function
+        const sendHttpRequest = (method, data) => {
+            const xhRequest = new XMLHttpRequest();
+            xhRequest.open(method, "/api", true);
+
+            xhRequest.responseType = "json";
+
+            if (data) {
+                xhRequest.setRequestHeader('Content-Type', 'application/json');
+            }
+            //console.log(JSON.stringify(data))
+            xhRequest.send(JSON.stringify(data))
+
+        };
+
+        // GET event handler
+        function GETeventHandler(event) {
+            //console.log(event)
+            sendHttpRequest('GET', '', {}).then(reponseData => { console.log(responseData) })
+        }
+
+        // POST event handler
+        function POSTeventHandler(event) {
+
+            // Touchmove event
+            if (event.type == 'touchmove') {
+                //console.log(toString(event.type))
+                varxArray = []
+                varyArray = []
+                idArray = []
+                for (let index = 0; index < event.touches.length; index++) {
+                    varxArray.push(event.touches[index].clientX)
+                    varyArray.push(event.touches[index].clientY)
+                    idArray.push(event.touches[index].identifier)
+                }
+                sendHttpRequest('POST', {
+                    eventType: event.type,
+                    xCoordinateArray: varxArray,
+                    yCoordinateArray: varyArray,
+                    ordinateIdentifier: idArray
+                })
+            };
+
+            // Touchstart event
+            if (event.type == 'touchstart') {
+                //console.log(event)
+                varxArray = []
+                varyArray = []
+                idArray = []
+                for (let index = 0; index < event.touches.length; index++) {
+                    varxArray.push(event.touches[index].clientX)
+                    varyArray.push(event.touches[index].clientY)
+                    idArray.push(event.touches[index].identifier)
+                }
+                sendHttpRequest('POST', {
+                    eventType: event.type,
+                    xCoordinateArray: varxArray,
+                    yCoordinateArray: varyArray,
+                    coordinateIdentifier: idArray
+                })
+            };
+
+            // Touchend event (it has a changedTouches array!!!)
+            if (event.type == 'touchend') {
+                console.log(event)
+                varxArray = []
+                varyArray = []
+                idArray = []
+                for (let index = 0; index < event.changedTouches.length; index++) {
+                    varxArray.push(event.changedTouches[index].clientX)
+                    varyArray.push(event.changedTouches[index].clientY)
+                    idArray.push(event.changedTouches[index].identifier)
+                }
+                sendHttpRequest('POST', {
+                    eventType: event.type,
+                    xCoordinateArray: varxArray,
+                    yCoordinateArray: varyArray,
+                    coordinateIdentifier: idArray
+                })
+            };
+
+            // Touchcancel event (it has a changedTouches array!!!)
+            if (event.type == 'touchcancel') {
+                varxArray = []
+                varyArray = []
+                idArray = []
+                for (let index = 0; index < event.changedTouches.length; index++) {
+                    varxArray.push(event.changedTouches[index].clientX)
+                    varyArray.push(event.changedTouches[index].clientY)
+                    idArray.push(event.changedTouches[index].identifier)
+                }
+                sendHttpRequest('POST', {
+                    eventType: event.type,
+                    xCoordinateArray: varxArray,
+                    yCoordinateArray: varyArray,
+                    ordinateIdentifier: idArray
+                })
+            };
+
+            // Button POST events
+            if (event.type == 'click') {
+                //console.log(event.path[0].id)
+                sendHttpRequest('POST', {
+                    eventType: event.srcElement.id
+                })
+            };
+        };
+
+        //Eventlisteners
+        postCanv.addEventListener("touchstart", POSTeventHandler); //false at the end is what? --> useCapture Optional
+        postCanv.addEventListener("touchend", POSTeventHandler);
+        postCanv.addEventListener("touchmove", POSTeventHandler);
+        postCanv.addEventListener("touchcancel", POSTeventHandler);
+
+        //Add event listeners to all buttons in a loop
+        for (i = 0; i < allKeyboardButtons.length; i++) {
+            allKeyboardButtons[i].addEventListener("click", POSTeventHandler);
+        }
+        for (i = 0; i < allMediaButtons.length; i++) {
+            allMediaButtons[i].addEventListener("click", POSTeventHandler);
+        }
+        for (i = 0; i < allMouseButtons.length; i++) {
+            allMouseButtons[i].addEventListener("click", POSTeventHandler);
+        }
+
+
+    </script>
+
+</body>
+
+</html>
