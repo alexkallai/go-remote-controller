@@ -1,0 +1,1 @@
+go build -ldflags "-H windowsgui" .\cmd\main.go 
