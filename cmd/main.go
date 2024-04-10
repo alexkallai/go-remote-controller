@@ -15,7 +15,7 @@ var (
 	PORT_ARG               = flag.Int("port", 5000, "Port to serve on")
 	SENSITIVITY_MULTIPLIER = flag.Float64("mousesensitivity", 2.0, "The ratio of mouse movement on screen / touch movement on phone screen [pixel/pixel]")
 	HELP_ARG               = flag.Bool("h", false, "Print only the CLI arguments")
-	LOGGING                = flag.Bool("log", false, "Turn logging on of off")
+	LOGGING                = flag.Bool("log", false, "Turn logging on or off")
 	//PASSWORD = flag.String("password", "", "Password for authentication")
 )
 
