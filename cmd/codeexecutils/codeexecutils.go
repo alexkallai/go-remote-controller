@@ -14,9 +14,18 @@ func ExecuteCommand(command string) {
 }
 
 var EventNameToCommandMap map[string]string = map[string]string{
-	"logout":   "shutdown /l",
-	"startcmd": "cmd",
-	"calc":     "calc.exe",
+	"logout":       "shutdown /l",
+	"shutdown":     "shutdown /s /f /t 0",
+	"restart":      "shutdown /r /f /t 0",
+	"sleep":        "powercfg -h off && rundll32.exe powrprof.dll,SetSuspendState 0,1,0",
+	"controlpanel": "control",
+	"chrome":       "start chrome",
+	"firefox":      "start firefox",
+	"lock":         "rundll32.exe user32.dll,LockWorkStation",
+	"taskmgr":      "taskmgr",
+	"notepad":      "start notepad",
+	"calc":         "start calc",
+	"cmd":          "start cmd",
 }
 
 func IsEventStringInCommandMap(eventString string) bool {

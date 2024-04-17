@@ -70,7 +70,7 @@
             height: 80%;
             width: 20%;
             min-width: 30px;
-            max-width: 70px;
+            max-width: 75%;
             max-height: 70px;
             display: inline-block;
             top: 0;
@@ -350,7 +350,7 @@
                     id="defaultOpen">Trackpad</button>
                 <button class="tablink" type="button" onclick="openPage('keyboard', this, '#45a29e')">Keyboard</button>
                 <button class="tablink" type="button" onclick="openPage('media', this, '#45a29e')">Media</button>
-                <button class="tablink" type="button" onclick="openPage('information', this, '#45a29e')">Usage</button>
+                <button class="tablink" type="button" onclick="openPage('commands', this, '#45a29e')">Commands</button>
                 <button class="tablink" type="button" style="float: right" id="aboutButton"
                     onclick="openPage('about', this, '#45a29e')">About</button>
             </div>
@@ -410,8 +410,6 @@
                             <button class="mediabutton" type="button" id="previous">Previous</button>
                             <button class="mediabutton" type="button" id="next">Next</button>
                             <button class="mediabutton" type="button" id="fullscreen">Full screen (ALT+ENTER)</button>
-                            <button class="mediabutton" type="button" id="fullscreen_yt">Full screen Youtube
-                                (F)</button>
                             <button class="mediabutton" type="button" id="escape">Escape</button>
                             <button class="mediabutton" type="button" id="volumeup">Volume Up</button>
                             <button class="mediabutton" type="button" id="mute">Mute</button>
@@ -424,15 +422,26 @@
                 </div>
             </div>
 
-            <!--Usage page-->
-            <div id="information" class="tabcontent">
-                <div class="animate__animated animate__fadeIn">
-                    <h4>Control your PC without client app!</h4>
-                    <h3>Trackpad tab:</h3>
-                    <h4>Standard trackpad functionality, with dual touch scrolling. 2 finger double tap or press long
-                        without movement for a right click.</h4>
-                    <h3>Keyboard, media tab:</h3>
-                    <h4>The buttons are simulated as keypresses.</h4>
+            <!--Mediabutton page-->
+            <div id="commands" class="tabcontent">
+                <div style="height: 5%"></div>
+                <div id="commandsButtonDiv" class="animate__animated animate__fadeIn">
+                    <div id="mediaButtonRowDiv">
+                        <div class="mediaButtonGrid">
+                            <button class="mediabutton" type="button" id="logout">Log out</button>
+                            <button class="mediabutton" type="button" id="shutdown">Shut down PC</button>
+                            <button class="mediabutton" type="button" id="restart">Restart PC</button>
+                            <button class="mediabutton" type="button" id="sleep">Send PC to sleep</button>
+                            <button class="mediabutton" type="button" id="controlpanel">Control panel</button>
+                            <button class="mediabutton" type="button" id="chrome">Chrome</button>
+                            <button class="mediabutton" type="button" id="firefox">Firefox</button>
+                            <button class="mediabutton" type="button" id="lock">Lock PC</button>
+                            <button class="mediabutton" type="button" id="taskmgr">Task Manager</button>
+                            <button class="mediabutton" type="button" id="notepad">Notepad</button>
+                            <button class="mediabutton" type="button" id="calc">Calculator</button>
+                            <button class="mediabutton" type="button" id="cmd">CMD window</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
