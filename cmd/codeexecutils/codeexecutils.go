@@ -6,30 +6,11 @@ import (
 	"syscall"
 )
 
-func ExecuteCommand(command string) (string, string, int) {
+func ExecuteCommand(command string) {
 	cmd := exec.Command("cmd")
 	cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: "/c " + os.ExpandEnv(command), HideWindow: true}
 	cmd.Env = os.Environ()
-
-	// Capture stdout and stderr
-	output, err := cmd.CombinedOutput()
-
-	var stdout, stderr string
-	if output != nil {
-		stdout = string(output)
-	}
-
-	if err != nil {
-		stderr = err.Error()
-	}
-
-	// Get the exit code
-	exitCode := 0
-	if exitError, ok := err.(*exec.ExitError); ok {
-		exitCode = exitError.ExitCode()
-	}
-
-	return stdout, stderr, exitCode
+	cmd.Start()
 }
 
 var EventNameToCommandMap map[string]string = map[string]string{
