@@ -1,1 +1,1 @@
-go build .\cmd\main.go 
+go build -o GoRemoteController.exe .\cmd\main.go

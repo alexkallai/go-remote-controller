@@ -1,1 +1,1 @@
-go build -ldflags "-H windowsgui" .\cmd\main.go 
+go build -o GoRemoteController.exe -ldflags "-H windowsgui" .\cmd\main.go
