@@ -3,6 +3,7 @@ package httpserverutils
 import (
 	"encoding/json"
 	"fmt"
+	"go-remote-controller/cmd/codeexecutils"
 	"go-remote-controller/cmd/inpututils"
 	"log"
 	"net/http"
@@ -33,7 +34,6 @@ func SetupHttpServerEndpoints(PORT *int) {
 func handleRootEndpoint(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main page served!")
 	fmt.Fprint(w, string(htmlFileTemplate))
-
 }
 
 func handleApiEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +50,8 @@ func handleApiEndpoint(w http.ResponseWriter, r *http.Request) {
 	} else if e.EventType == "rightclick" || e.EventType == "midclick" || e.EventType == "leftclick" {
 		log.Printf("Handling single click event: %v", e.EventType)
 		inpututils.SendMouseInput(inpututils.EventNameToMouseInputMap[e.EventType])
+	} else if codeexecutils.IsEventStringInCommandMap(e.EventType) {
+		codeexecutils.ExecuteCommand(codeexecutils.EventNameToCommandMap[e.EventType])
 	} else {
 		log.Printf("Handling single keyboard input event: %v", e.EventType)
 		inpututils.SendKeys(inpututils.EventNameToKbdInputMap[e.EventType])
