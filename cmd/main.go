@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go-remote-controller/cmd/cmdpatchutil"
 	"go-remote-controller/cmd/httpserverutils"
 	"go-remote-controller/cmd/qrcodeutils"
 	"io"
@@ -46,7 +47,19 @@ func printServerInfo() {
 	}
 }
 
+// Windows CMD has an issue where it may hang the execution when
+// there is an interaction, so this solves that
+func disableQuickEditMode() {
+	log.Println("Disabling Quick Edit mode for cmd")
+	err := cmdpatchutil.DisableQuickEditMode()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+}
+
 func main() {
+	disableQuickEditMode()
 	handleCliArgs()
 	// Get IP addresses and print the service's availability
 	printServerInfo()
