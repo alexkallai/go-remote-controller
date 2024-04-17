@@ -17,6 +17,7 @@ var (
 	SENSITIVITY_MULTIPLIER = flag.Float64("mousesensitivity", 2.0, "The ratio of mouse movement on screen / touch movement on phone screen [pixel/pixel]")
 	HELP_ARG               = flag.Bool("h", false, "Print only the CLI arguments")
 	LOGGING                = flag.Bool("log", false, "Turn logging on or off")
+	QEMODE                 = flag.Bool("quickeditmode", false, "Don't disable Quick Edit mode for the cmd window")
 	//PASSWORD = flag.String("password", "", "Password for authentication")
 )
 
@@ -49,18 +50,20 @@ func printServerInfo() {
 
 // Windows CMD has an issue where it may hang the execution when
 // there is an interaction, so this solves that
-func disableQuickEditMode() {
-	log.Println("Disabling Quick Edit mode for cmd")
-	err := cmdpatchutil.DisableQuickEditMode()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
+func handleQuickEditMode() {
+	if !*QEMODE {
+		log.Println("Disabling Quick Edit mode for cmd")
+		err := cmdpatchutil.DisableQuickEditMode()
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
 	}
 }
 
 func main() {
-	disableQuickEditMode()
 	handleCliArgs()
+	handleQuickEditMode()
 	// Get IP addresses and print the service's availability
 	printServerInfo()
 	httpserverutils.SetupHttpServerEndpoints(PORT_ARG)
