@@ -21,8 +21,8 @@ var (
 	//PASSWORD = flag.String("password", "", "Password for authentication")
 )
 
+// Handle CLI args
 func handleCliArgs() {
-	// Handle CLI args
 	flag.Parse()
 	fmt.Println("CLI arguments:")
 	flag.PrintDefaults()
@@ -37,6 +37,7 @@ func handleCliArgs() {
 	}
 }
 
+// Get IP addresses and print the service's availability
 func printServerInfo() {
 	ipAddresses := qrcodeutils.GetLocalIpAdresses()
 	port_string := fmt.Sprintf(":%d", *PORT_ARG)
@@ -61,11 +62,14 @@ func handleQuickEditMode() {
 	}
 }
 
+func startHttpServer() {
+	httpserverutils.SetupHttpServerEndpoints(PORT_ARG)
+}
+
 func main() {
 	handleCliArgs()
 	handleQuickEditMode()
-	// Get IP addresses and print the service's availability
 	printServerInfo()
-	httpserverutils.SetupHttpServerEndpoints(PORT_ARG)
+	startHttpServer()
 
 }
