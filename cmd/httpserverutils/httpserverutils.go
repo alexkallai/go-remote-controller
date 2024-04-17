@@ -21,6 +21,7 @@ func SetupHttpServerEndpoints(PORT *int) {
 	// Set up listener endpoints
 	http.HandleFunc("/", handleRootEndpoint)
 	http.HandleFunc("/api", handleApiEndpoint)
+	http.HandleFunc("/screen", handleScreenEndpoint)
 	http.HandleFunc("/favicon.ico", doNothing)
 
 	// Set up http server
@@ -59,6 +60,10 @@ func handleApiEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	elapsed := time.Since(start)
 	log.Println("API request served in", elapsed)
+}
+
+func handleScreenEndpoint(w http.ResponseWriter, r *http.Request) {
+	log.Printf("TODO")
 }
 
 func doNothing(w http.ResponseWriter, r *http.Request) {}
