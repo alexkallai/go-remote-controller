@@ -80,6 +80,7 @@ var EventNameToKbdInputMap map[string][]user32util.KeybdInput = map[string][]use
 	"fullscreen":    {{WVK: KeyCodes["VK_CONTROL"]}, {WVK: KeyCodes["VK_RETURN"]}, {WVK: KeyCodes["VK_CONTROL"], DwFlags: user32util.KeyEventFKeyUp}},
 	"fullscreen_yt": {{WVK: KeyCodes["F_key"]}},
 	"escape":        {{WVK: KeyCodes["VK_ESCAPE"]}},
+	"closetab":      {{WVK: KeyCodes["VK_CONTROL"]}, {WVK: KeyCodes["W_key"]}, {WVK: KeyCodes["VK_CONTROL"], DwFlags: user32util.KeyEventFKeyUp}},
 	"volumeup":      {{WVK: KeyCodes["VK_VOLUME_UP"]}},
 	"mute":          {{WVK: KeyCodes["VK_VOLUME_MUTE"]}},
 	"volumedown":    {{WVK: KeyCodes["VK_VOLUME_DOWN"]}},
